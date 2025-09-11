@@ -18,7 +18,7 @@ type EmployeeRepository struct {
 func (r *EmployeeRepository) CreateEmployee(ctx context.Context, emp models.Employee) (int64, error) {
 	result, err := r.DB.ExecContext(
 		ctx,
-		`INSERT INTO Employee
+		`INSERT INTO Employees
 		(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate, Address, City, Region, PostalCode, Country, HomePhone, Extension, Photo, Notes, ReportsTo, PhotoPath)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		emp.LastName, emp.FirstName, emp.Title, emp.TitleOfCourtesy, emp.BirthDate, emp.HireDate,
@@ -36,8 +36,8 @@ func (r *EmployeeRepository) GetAllEmployees(ctx context.Context) ([]models.Empl
 	rows, err := r.DB.QueryContext(ctx, `
 		SELECT
 			EmployeeID, LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate,
-			Address, City, Region, PostalCode, Country, HomePhone, Extension, Photo, Notes, ReportsTo, PhotoPath
-		FROM Employee
+			Address, City, Region, PostalCode, Country, HomePhone, Extension, Notes, ReportsTo, PhotoPath
+		FROM Employees
 	`)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to query employees")
@@ -63,7 +63,7 @@ func (r *EmployeeRepository) GetAllEmployees(ctx context.Context) ([]models.Empl
 			&employee.Country,
 			&employee.HomePhone,
 			&employee.Extension,
-			&employee.Photo,
+			// &employee.Photo,
 			&employee.Notes,
 			&employee.ReportsTo,
 			&employee.PhotoPath,
@@ -85,8 +85,8 @@ func (r *EmployeeRepository) GetEmployeeByID(ctx context.Context, id int) (model
 	err := r.DB.QueryRowContext(ctx, `
 		SELECT
 			EmployeeID, LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate,
-			Address, City, Region, PostalCode, Country, HomePhone, Extension, Photo, Notes, ReportsTo, PhotoPath
-		FROM Employee
+			Address, City, Region, PostalCode, Country, HomePhone, Extension, Notes, ReportsTo, PhotoPath
+		FROM Employees
 		WHERE EmployeeID = ?
 	`, id).Scan(
 		&employee.EmployeeID,
@@ -103,7 +103,7 @@ func (r *EmployeeRepository) GetEmployeeByID(ctx context.Context, id int) (model
 		&employee.Country,
 		&employee.HomePhone,
 		&employee.Extension,
-		&employee.Photo,
+		// &employee.Photo,
 		&employee.Notes,
 		&employee.ReportsTo,
 		&employee.PhotoPath,
@@ -121,7 +121,7 @@ func (r *EmployeeRepository) GetEmployeeByID(ctx context.Context, id int) (model
 func (r *EmployeeRepository) UpdateEmployee(ctx context.Context, emp *models.Employee) error {
 	_, err := r.DB.ExecContext(
 		ctx,
-		`UPDATE Employee SET
+		`UPDATE Employees SET
 			LastName = ?, FirstName = ?, Title = ?, TitleOfCourtesy = ?, BirthDate = ?, HireDate = ?,
 			Address = ?, City = ?, Region = ?, PostalCode = ?, Country = ?, HomePhone = ?, Extension = ?,
 			Photo = ?, Notes = ?, ReportsTo = ?, PhotoPath = ?
@@ -139,7 +139,7 @@ func (r *EmployeeRepository) UpdateEmployee(ctx context.Context, emp *models.Emp
 }
 
 func (r *EmployeeRepository) DeleteEmployee(ctx context.Context, id int) error {
-	result, err := r.DB.ExecContext(ctx, "DELETE FROM Employee WHERE EmployeeID = ?", id)
+	result, err := r.DB.ExecContext(ctx, "DELETE FROM Employees WHERE EmployeeID = ?", id)
 	if err != nil {
 		log.Error().Err(err).Int("employee_id", id).Msg("Error deleting employee")
 		return fmt.Errorf("error deleting employee: %w", err)

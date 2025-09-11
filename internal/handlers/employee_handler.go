@@ -73,7 +73,7 @@ func (h *EmployeeHandler) Create(c *gin.Context) {
 	}
 
 	emp.EmployeeID = int(id)
-	c.JSON(http.StatusCreated, emp)
+	c.JSON(http.StatusCreated, gin.H{"message": "employee created successfully"})
 }
 
 // @Summary Update an employee
@@ -99,7 +99,7 @@ func (h *EmployeeHandler) Update(c *gin.Context) {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, emp)
+	c.JSON(http.StatusOK, gin.H{"message": "employee updated successfully"})
 }
 
 // @Summary Delete an employee
