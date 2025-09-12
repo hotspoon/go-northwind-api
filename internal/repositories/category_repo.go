@@ -32,7 +32,7 @@ func (r *CategoryRepository) CreateCategory(ctx context.Context, c *models.Categ
 
 func (r *CategoryRepository) GetAllCategories(ctx context.Context) ([]models.Category, error) {
 	rows, err := r.DB.QueryContext(ctx, `
-		SELECT CategoryID, CategoryName, Description, Picture
+		SELECT CategoryID, CategoryName, Description
 		FROM Categories
 	`)
 	if err != nil {
@@ -44,7 +44,7 @@ func (r *CategoryRepository) GetAllCategories(ctx context.Context) ([]models.Cat
 	var categories []models.Category
 	for rows.Next() {
 		var category models.Category
-		if err := rows.Scan(&category.CategoryID, &category.CategoryName, &category.Description, &category.Picture); err != nil {
+		if err := rows.Scan(&category.CategoryID, &category.CategoryName, &category.Description); err != nil {
 			log.Error().Err(err).Msg("error scanning category row")
 			return nil, fmt.Errorf("error scanning category row: %w", err)
 		}
@@ -60,10 +60,10 @@ func (r *CategoryRepository) GetAllCategories(ctx context.Context) ([]models.Cat
 func (r *CategoryRepository) GetCategoryByID(ctx context.Context, id int) (models.Category, error) {
 	var category models.Category
 	err := r.DB.QueryRowContext(ctx, `
-		SELECT CategoryID, CategoryName, Description, Picture
+		SELECT CategoryID, CategoryName, Description
 		FROM Categories
 		WHERE CategoryID = ?
-	`, id).Scan(&category.CategoryID, &category.CategoryName, &category.Description, &category.Picture)
+	`, id).Scan(&category.CategoryID, &category.CategoryName, &category.Description)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			log.Warn().Int("id", id).Msg("category not found")

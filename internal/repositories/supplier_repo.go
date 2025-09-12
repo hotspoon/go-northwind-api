@@ -162,7 +162,7 @@ func (r *SupplierRepository) GetSuppliersByProductID(ctx context.Context, produc
 	return suppliers, nil
 }
 
-func (r *ProductRepository) CreateSupplier(ctx context.Context, s *models.Supplier) error {
+func (r *SupplierRepository) CreateSupplier(ctx context.Context, s *models.Supplier) error {
 	result, err := r.DB.ExecContext(ctx, `
 		INSERT INTO Suppliers (
 			CompanyName,
@@ -200,5 +200,58 @@ func (r *ProductRepository) CreateSupplier(ctx context.Context, s *models.Suppli
 		return fmt.Errorf("error fetching last insert ID: %w", err)
 	}
 	s.SupplierID = id
+	return nil
+}
+
+func (r *SupplierRepository) UpdateSupplier(ctx context.Context, s *models.Supplier) error {
+	_, err := r.DB.ExecContext(ctx, `
+		UPDATE Suppliers SET
+			CompanyName = ?,
+			ContactName = ?,
+			ContactTitle = ?,
+			Address = ?,
+			City = ?,
+			Region = ?,
+			PostalCode = ?,
+			Country = ?,
+			Phone = ?,
+			Fax = ?,
+			HomePage = ?
+		WHERE SupplierID = ?
+	`,
+		s.CompanyName,
+		s.ContactName,
+		s.ContactTitle,
+		s.Address,
+		s.City,
+		s.Region,
+		s.PostalCode,
+		s.Country,
+		s.Phone,
+		s.Fax,
+		s.HomePage,
+		s.SupplierID,
+	)
+	if err != nil {
+		log.Error().Err(err).Msg("error updating supplier")
+		return fmt.Errorf("error updating supplier: %w", err)
+	}
+	return nil
+}
+
+func (r *SupplierRepository) DeleteSupplier(ctx context.Context, id int) error {
+	result, err := r.DB.ExecContext(ctx, `DELETE FROM Suppliers WHERE SupplierID = ?`, id)
+	if err != nil {
+		log.Error().Err(err).Int("supplier_id", id).Msg("error deleting supplier")
+		return fmt.Errorf("error deleting supplier: %w", err)
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		log.Error().Err(err).Int("supplier_id", id).Msg("error fetching rows affected for delete supplier")
+		return fmt.Errorf("error fetching rows affected: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("supplier with ID %d not found", id)
+	}
 	return nil
 }

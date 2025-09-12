@@ -87,6 +87,88 @@ definitions:
       error:
         type: string
     type: object
+  models.Order:
+    properties:
+      customer_id:
+        description: TEXT, nullable
+        type: string
+      employee_id:
+        description: INTEGER, nullable
+        type: integer
+      freight:
+        description: NUMERIC, nullable (default 0)
+        type: number
+      order_date:
+        description: DATETIME, nullable (use *time.Time if you want time type)
+        type: string
+      order_id:
+        description: INTEGER, PK, Auto Increment, Not Null
+        type: integer
+      required_date:
+        description: DATETIME, nullable
+        type: string
+      ship_address:
+        description: TEXT, nullable
+        type: string
+      ship_city:
+        description: TEXT, nullable
+        type: string
+      ship_country:
+        description: TEXT, nullable
+        type: string
+      ship_name:
+        description: TEXT, nullable
+        type: string
+      ship_postal_code:
+        description: TEXT, nullable
+        type: string
+      ship_region:
+        description: TEXT, nullable
+        type: string
+      ship_via:
+        description: INTEGER, nullable
+        type: integer
+      shipped_date:
+        description: DATETIME, nullable
+        type: string
+    type: object
+  models.OrderDetail:
+    properties:
+      discount:
+        description: REAL, Not Null (default 0)
+        type: number
+      order_id:
+        description: INTEGER, Not Null
+        type: integer
+      product_id:
+        description: INTEGER, Not Null
+        type: integer
+      quantity:
+        description: INTEGER, Not Null (default 1)
+        type: integer
+      unit_price:
+        description: NUMERIC, Not Null (default 0)
+        type: number
+    type: object
+  models.Paginated-models_Order:
+    properties:
+      has_next:
+        type: boolean
+      has_prev:
+        type: boolean
+      items:
+        items:
+          $ref: '#/definitions/models.Order'
+        type: array
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
   models.Product:
     properties:
       category_id:
@@ -137,6 +219,33 @@ definitions:
     properties:
       message:
         type: string
+    type: object
+  models.Supplier:
+    properties:
+      address:
+        type: string
+      city:
+        type: string
+      company_name:
+        type: string
+      contact_name:
+        type: string
+      contact_title:
+        type: string
+      country:
+        type: string
+      fax:
+        type: string
+      homepage:
+        type: string
+      phone:
+        type: string
+      postal_code:
+        type: string
+      region:
+        type: string
+      supplier_id:
+        type: integer
     type: object
 info:
   contact: {}
@@ -531,6 +640,192 @@ paths:
       summary: Update an employee
       tags:
       - Employees
+  /api/v1/orders:
+    get:
+      description: Returns a list of all orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Order'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all orders
+      tags:
+      - Orders
+    post:
+      consumes:
+      - application/json
+      description: Creates a new order
+      parameters:
+      - description: Order to create
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new order
+      tags:
+      - Orders
+  /api/v1/orders/{id}:
+    delete:
+      description: Deletes an existing order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an order
+      tags:
+      - Orders
+    get:
+      description: Returns a single order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Order'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get order by ID
+      tags:
+      - Orders
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing order
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Order to update
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/models.Order'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update an order
+      tags:
+      - Orders
+  /api/v1/orders/{id}/details:
+    get:
+      description: Returns order details for a specific order by Order ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.OrderDetail'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get order details by Order ID
+      tags:
+      - Orders
+  /api/v1/orders/paginated:
+    get:
+      description: Returns a paginated list of orders
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Paginated-models_Order'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get paginated orders
+      tags:
+      - Orders
   /api/v1/products:
     get:
       description: Returns a list of all products
@@ -853,4 +1148,133 @@ paths:
       summary: Update an existing shipper
       tags:
       - Shippers
+  /api/v1/suppliers:
+    get:
+      description: Returns a list of all suppliers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Supplier'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all suppliers
+      tags:
+      - Suppliers
+    post:
+      consumes:
+      - application/json
+      description: Creates a new supplier
+      parameters:
+      - description: Supplier to create
+        in: body
+        name: supplier
+        required: true
+        schema:
+          $ref: '#/definitions/models.Supplier'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new supplier
+      tags:
+      - Suppliers
+  /api/v1/suppliers/{id}:
+    delete:
+      description: Deletes a supplier by ID
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a supplier
+      tags:
+      - Suppliers
+    get:
+      description: Returns a single supplier by ID
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Supplier'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get supplier by ID
+      tags:
+      - Suppliers
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing supplier
+      parameters:
+      - description: Supplier ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Supplier to update
+        in: body
+        name: supplier
+        required: true
+        schema:
+          $ref: '#/definitions/models.Supplier'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a supplier
+      tags:
+      - Suppliers
 swagger: "2.0"
