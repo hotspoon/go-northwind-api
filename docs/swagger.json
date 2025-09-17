@@ -1282,6 +1282,392 @@
                 }
             }
         },
+        "/api/v1/reports/average-order-value": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns the average value of orders",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Average order value",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.AverageOrderValue"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/customer-growth": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns customer growth over time",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Customer growth",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.CustomerGrowth"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/employee-performance": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns performance metrics for employees",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Employee performance",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.EmployeePerformance"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/inventory-status": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns current inventory levels and status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Inventory status",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.InventoryStatus"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/monthly-sales": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns sales totals grouped by month",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Monthly sales",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.MonthlySales"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/order-status-summary": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns a breakdown of orders by status",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Order status summary",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.OrderStatusSummary"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/product-profitability": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns profitability metrics for products",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Product profitability",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ProductProfitability"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/region-sales": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns sales grouped by region",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Region sales",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.RegionSales"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/sales-by-category": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns sales report grouped by category",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales by category",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SalesByCategory"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/sales-by-employee": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns sales report grouped by employee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales by employee",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.SalesByEmployee"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/sales-summary": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns an overall sales summary",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Sales summary",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SalesSummary"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/top-customers": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns customers with the highest total purchases",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Top customers by total purchases",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TopCustomer"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/top-products": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns products with the highest sales",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Top selling products",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TopProduct"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/reports/top-suppliers": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Returns suppliers ranked by performance or volume",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Reports"
+                ],
+                "summary": "Top suppliers",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TopSupplier"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/shippers": {
             "get": {
                 "security": [
@@ -1758,6 +2144,14 @@
         }
     },
     "definitions": {
+        "models.AverageOrderValue": {
+            "type": "object",
+            "properties": {
+                "average": {
+                    "type": "number"
+                }
+            }
+        },
         "models.Category": {
             "type": "object",
             "properties": {
@@ -1816,6 +2210,22 @@
                     "type": "string"
                 },
                 "region": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CustomerGrowth": {
+            "type": "object",
+            "properties": {
+                "cumulative_unique": {
+                    "description": "running total",
+                    "type": "integer"
+                },
+                "new_customers": {
+                    "description": "first time placing an order that month",
+                    "type": "integer"
+                },
+                "year_month": {
                     "type": "string"
                 }
             }
@@ -1882,10 +2292,72 @@
                 }
             }
         },
+        "models.EmployeePerformance": {
+            "type": "object",
+            "properties": {
+                "avg_order_value": {
+                    "type": "number"
+                },
+                "employee_id": {
+                    "type": "integer"
+                },
+                "employee_name": {
+                    "type": "string"
+                },
+                "orders_handled": {
+                    "type": "integer"
+                },
+                "total_sales": {
+                    "type": "number"
+                },
+                "unique_customers": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.ErrorResponse": {
             "type": "object",
             "properties": {
                 "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.InventoryStatus": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "reorder_level": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "\"OK\", \"LOW\", \"OUT\"",
+                    "type": "string"
+                },
+                "units_in_stock": {
+                    "type": "integer"
+                },
+                "units_on_order": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.MonthlySales": {
+            "type": "object",
+            "properties": {
+                "orders": {
+                    "type": "integer"
+                },
+                "total_sales": {
+                    "type": "number"
+                },
+                "year_month": {
+                    "description": "e.g. 1997-01",
                     "type": "string"
                 }
             }
@@ -1976,6 +2448,18 @@
                 }
             }
         },
+        "models.OrderStatusSummary": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "\"Pending\", \"Shipped\", \"Late\"",
+                    "type": "string"
+                }
+            }
+        },
         "models.Paginated-models_Order": {
             "type": "object",
             "properties": {
@@ -2051,6 +2535,30 @@
                 }
             }
         },
+        "models.ProductProfitability": {
+            "type": "object",
+            "properties": {
+                "cogs": {
+                    "description": "approximated using Products.UnitPrice as cost (see note)",
+                    "type": "number"
+                },
+                "gross_margin_pct": {
+                    "type": "number"
+                },
+                "gross_profit": {
+                    "type": "number"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "revenue": {
+                    "type": "number"
+                }
+            }
+        },
         "models.ProductSupplier": {
             "type": "object",
             "properties": {
@@ -2070,6 +2578,72 @@
                 },
                 "region_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.RegionSales": {
+            "type": "object",
+            "properties": {
+                "orders": {
+                    "type": "integer"
+                },
+                "region": {
+                    "description": "using ShipRegion; fallback to ShipCountry if NULL",
+                    "type": "string"
+                },
+                "total_sales": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.SalesByCategory": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                },
+                "category_name": {
+                    "type": "string"
+                },
+                "total_sales": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.SalesByEmployee": {
+            "type": "object",
+            "properties": {
+                "employee_id": {
+                    "type": "integer"
+                },
+                "employee_name": {
+                    "type": "string"
+                },
+                "total_sales": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.SalesSummary": {
+            "type": "object",
+            "properties": {
+                "average_order_value": {
+                    "type": "number"
+                },
+                "first_order_date": {
+                    "type": "string"
+                },
+                "last_order_date": {
+                    "type": "string"
+                },
+                "total_customers": {
+                    "type": "integer"
+                },
+                "total_orders": {
+                    "type": "integer"
+                },
+                "total_revenue": {
+                    "type": "number"
                 }
             }
         },
@@ -2133,6 +2707,51 @@
                 },
                 "supplier_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "models.TopCustomer": {
+            "type": "object",
+            "properties": {
+                "company_name": {
+                    "type": "string"
+                },
+                "customer_id": {
+                    "type": "string"
+                },
+                "total_purchase": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.TopProduct": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "integer"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "total_sold": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.TopSupplier": {
+            "type": "object",
+            "properties": {
+                "company_name": {
+                    "type": "string"
+                },
+                "supplier_id": {
+                    "type": "integer"
+                },
+                "total_qty": {
+                    "type": "integer"
+                },
+                "total_sales": {
+                    "type": "number"
                 }
             }
         }

@@ -48,6 +48,9 @@ func Register(e *gin.Engine, d Deps) {
 	regionRepo := &repositories.RegionRepository{DB: d.DB}
 	regionHandler := &handlers.RegionHandler{Repo: regionRepo}
 
+	reportRepo := &repositories.ReportRepository{DB: d.DB}
+	reportHandler := &handlers.ReportHandler{Repo: reportRepo}
+
 	// Swagger (only non-prod)
 	RegisterSwagger(e, d.Config)
 
@@ -72,4 +75,5 @@ func Register(e *gin.Engine, d Deps) {
 	RegisterOrderRoutes(protected, orderHandler)
 	RegisterRegionRoutes(protected, regionHandler)
 	RegisterTeritoryRoutes(protected, regionHandler)
+	RegisterReportRoutes(protected, reportHandler)
 }

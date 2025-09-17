@@ -1,4 +1,9 @@
 definitions:
+  models.AverageOrderValue:
+    properties:
+      average:
+        type: number
+    type: object
   models.Category:
     properties:
       category_id:
@@ -39,6 +44,17 @@ definitions:
       postal_code:
         type: string
       region:
+        type: string
+    type: object
+  models.CustomerGrowth:
+    properties:
+      cumulative_unique:
+        description: running total
+        type: integer
+      new_customers:
+        description: first time placing an order that month
+        type: integer
+      year_month:
         type: string
     type: object
   models.Employee:
@@ -82,9 +98,50 @@ definitions:
       title_of_courtesy:
         type: string
     type: object
+  models.EmployeePerformance:
+    properties:
+      avg_order_value:
+        type: number
+      employee_id:
+        type: integer
+      employee_name:
+        type: string
+      orders_handled:
+        type: integer
+      total_sales:
+        type: number
+      unique_customers:
+        type: integer
+    type: object
   models.ErrorResponse:
     properties:
       error:
+        type: string
+    type: object
+  models.InventoryStatus:
+    properties:
+      product_id:
+        type: integer
+      product_name:
+        type: string
+      reorder_level:
+        type: integer
+      status:
+        description: '"OK", "LOW", "OUT"'
+        type: string
+      units_in_stock:
+        type: integer
+      units_on_order:
+        type: integer
+    type: object
+  models.MonthlySales:
+    properties:
+      orders:
+        type: integer
+      total_sales:
+        type: number
+      year_month:
+        description: e.g. 1997-01
         type: string
     type: object
   models.Order:
@@ -150,6 +207,14 @@ definitions:
         description: NUMERIC, Not Null (default 0)
         type: number
     type: object
+  models.OrderStatusSummary:
+    properties:
+      count:
+        type: integer
+      status:
+        description: '"Pending", "Shipped", "Late"'
+        type: string
+    type: object
   models.Paginated-models_Order:
     properties:
       has_next:
@@ -199,6 +264,22 @@ definitions:
       category_name:
         type: string
     type: object
+  models.ProductProfitability:
+    properties:
+      cogs:
+        description: approximated using Products.UnitPrice as cost (see note)
+        type: number
+      gross_margin_pct:
+        type: number
+      gross_profit:
+        type: number
+      product_id:
+        type: integer
+      product_name:
+        type: string
+      revenue:
+        type: number
+    type: object
   models.ProductSupplier:
     properties:
       company_name:
@@ -212,6 +293,49 @@ definitions:
         type: string
       region_id:
         type: integer
+    type: object
+  models.RegionSales:
+    properties:
+      orders:
+        type: integer
+      region:
+        description: using ShipRegion; fallback to ShipCountry if NULL
+        type: string
+      total_sales:
+        type: number
+    type: object
+  models.SalesByCategory:
+    properties:
+      category_id:
+        type: integer
+      category_name:
+        type: string
+      total_sales:
+        type: number
+    type: object
+  models.SalesByEmployee:
+    properties:
+      employee_id:
+        type: integer
+      employee_name:
+        type: string
+      total_sales:
+        type: number
+    type: object
+  models.SalesSummary:
+    properties:
+      average_order_value:
+        type: number
+      first_order_date:
+        type: string
+      last_order_date:
+        type: string
+      total_customers:
+        type: integer
+      total_orders:
+        type: integer
+      total_revenue:
+        type: number
     type: object
   models.Shipper:
     properties:
@@ -253,6 +377,35 @@ definitions:
         type: string
       supplier_id:
         type: integer
+    type: object
+  models.TopCustomer:
+    properties:
+      company_name:
+        type: string
+      customer_id:
+        type: string
+      total_purchase:
+        type: number
+    type: object
+  models.TopProduct:
+    properties:
+      product_id:
+        type: integer
+      product_name:
+        type: string
+      total_sold:
+        type: integer
+    type: object
+  models.TopSupplier:
+    properties:
+      company_name:
+        type: string
+      supplier_id:
+        type: integer
+      total_qty:
+        type: integer
+      total_sales:
+        type: number
     type: object
 info:
   contact: {}
@@ -1062,6 +1215,240 @@ paths:
       summary: Get region by ID
       tags:
       - Regions
+  /api/v1/reports/average-order-value:
+    get:
+      description: Returns the average value of orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AverageOrderValue'
+      security:
+      - BearerAuth: []
+      summary: Average order value
+      tags:
+      - Reports
+  /api/v1/reports/customer-growth:
+    get:
+      description: Returns customer growth over time
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CustomerGrowth'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Customer growth
+      tags:
+      - Reports
+  /api/v1/reports/employee-performance:
+    get:
+      description: Returns performance metrics for employees
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.EmployeePerformance'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Employee performance
+      tags:
+      - Reports
+  /api/v1/reports/inventory-status:
+    get:
+      description: Returns current inventory levels and status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.InventoryStatus'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Inventory status
+      tags:
+      - Reports
+  /api/v1/reports/monthly-sales:
+    get:
+      description: Returns sales totals grouped by month
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.MonthlySales'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Monthly sales
+      tags:
+      - Reports
+  /api/v1/reports/order-status-summary:
+    get:
+      description: Returns a breakdown of orders by status
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.OrderStatusSummary'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Order status summary
+      tags:
+      - Reports
+  /api/v1/reports/product-profitability:
+    get:
+      description: Returns profitability metrics for products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ProductProfitability'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Product profitability
+      tags:
+      - Reports
+  /api/v1/reports/region-sales:
+    get:
+      description: Returns sales grouped by region
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.RegionSales'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Region sales
+      tags:
+      - Reports
+  /api/v1/reports/sales-by-category:
+    get:
+      description: Returns sales report grouped by category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SalesByCategory'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Sales by category
+      tags:
+      - Reports
+  /api/v1/reports/sales-by-employee:
+    get:
+      description: Returns sales report grouped by employee
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SalesByEmployee'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Sales by employee
+      tags:
+      - Reports
+  /api/v1/reports/sales-summary:
+    get:
+      description: Returns an overall sales summary
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SalesSummary'
+      security:
+      - BearerAuth: []
+      summary: Sales summary
+      tags:
+      - Reports
+  /api/v1/reports/top-customers:
+    get:
+      description: Returns customers with the highest total purchases
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TopCustomer'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Top customers by total purchases
+      tags:
+      - Reports
+  /api/v1/reports/top-products:
+    get:
+      description: Returns products with the highest sales
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TopProduct'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Top selling products
+      tags:
+      - Reports
+  /api/v1/reports/top-suppliers:
+    get:
+      description: Returns suppliers ranked by performance or volume
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TopSupplier'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Top suppliers
+      tags:
+      - Reports
   /api/v1/shippers:
     get:
       description: Returns a list of all shippers
