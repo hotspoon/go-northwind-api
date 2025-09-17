@@ -206,6 +206,13 @@ definitions:
       supplier_id:
         type: integer
     type: object
+  models.Region:
+    properties:
+      region_description:
+        type: string
+      region_id:
+        type: integer
+    type: object
   models.Shipper:
     properties:
       company_name:
@@ -1005,6 +1012,56 @@ paths:
       summary: Get supplier for a product
       tags:
       - Products
+  /api/v1/regions:
+    get:
+      description: Returns a list of all regions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Region'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get all regions
+      tags:
+      - Regions
+  /api/v1/regions/{id}:
+    get:
+      description: Returns a single region by ID
+      parameters:
+      - description: Region ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Region'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get region by ID
+      tags:
+      - Regions
   /api/v1/shippers:
     get:
       description: Returns a list of all shippers
@@ -1277,4 +1334,32 @@ paths:
       summary: Update a supplier
       tags:
       - Suppliers
+  /api/v1/territories/{id}/employees:
+    get:
+      description: Returns a list of employees associated with a specific territory
+        ID
+      parameters:
+      - description: Territory ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Employee'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get employees by territory ID
+      tags:
+      - Regions
 swagger: "2.0"

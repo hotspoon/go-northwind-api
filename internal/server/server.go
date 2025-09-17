@@ -18,7 +18,7 @@ func NewEngine() *gin.Engine {
 	// r.Use(cors.Default())        // gin-contrib/cors if needed
 
 	// Global 404/405 and error formatter
-	r.NoRoute(middleware.NotFoundHandler())
+	// r.NoRoute(middleware.NotFoundHandler())
 	r.NoMethod(middleware.MethodNotAllowedHandler())
 	r.Use(middleware.ErrorFormatter())
 
